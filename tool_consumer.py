@@ -45,7 +45,6 @@ def tool_launch():
             request.form.get('consumer_secret'))
     consumer.set_config(config)
 
-    import ipdb; ipdb.set_trace()
     host = request.scheme + '://' + request.host_with_port
 
     # Set some launch data from: http://www.imsglobal.org/LTI/v1p1pd/ltiIMGv1p1pd.html#_Toc309649684
