@@ -6,17 +6,17 @@
                 <tr>
                     <td colspan="2">Launch Parameters</td>
                 </tr>
-                {% for key, val in launch_data %}
+                {% for key in launch_data %}
                 <tr>
                     <td>{{ key }}</td>
-                    <td>{{ val }}</td>
+                    <td>{{ launch_data[key] }}</td>
                 </tr>
                 {% endfor %}
             </table>
 
             <form action="{{ launch_url }}" name="ltiLaunchForm" id="ltiLaunchForm" method="post" encType="application/x-www-form-urlencoded">
-                {% for key, val in launch_data %}
-                <input type="hidden" name="{{ key }}" value="{{ val }}"/>
+                {% for key in launch_data %}
+                <input type="hidden" name="{{ key }}" value="{{ launch_data[key] }}"/>
                 {% endfor %}
                 <button type="submit">Launch the tool</button>
             </form>

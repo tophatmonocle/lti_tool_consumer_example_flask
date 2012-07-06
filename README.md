@@ -13,7 +13,7 @@ TODO
 
 ## Usage
 
-TODO
+`python tool_consumer.py`
 
 ## Testing
 

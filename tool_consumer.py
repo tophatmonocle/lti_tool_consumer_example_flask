@@ -45,21 +45,22 @@ def tool_launch():
             request.form.get('consumer_secret'))
     consumer.set_config(config)
 
-    host = request.scheme + '://' + request.host_with_port
-
     # Set some launch data from: http://www.imsglobal.org/LTI/v1p1pd/ltiIMGv1p1pd.html#_Toc309649684
     # Only this first one is required, but the rest are recommended
     consumer.resource_link_id = 'thisistotallyunique'
-    consumer.launch_presentation_return_url = host + '/tool_return'
+    consumer.launch_presentation_return_url = request.url + '/tool_return'
     consumer.lis_person_name_given = session['username']
-    consumer.user_id = hashlib.md5().update(session['username']).digest()
+    hash = hashlib.md5()
+    hash.update(session['username'])
+    consumer.user_id = hash.hexdigest()
     consumer.roles = 'learner'
     consumer.context_id = 'bestcourseever'
     consumer.context_title = 'Example Flask Tool Consumer'
     consumer.tool_consumer_instance_name = 'Frankie'
 
     if request.form.get('assignment'):
-        consumer.lis_outcome_service_url = host + '/grade_passback'
+        consumer.lis_outcome_service_url = request.scheme + '://' +\
+                request.host + '/grade_passback'
         consumer.list_result_sourcedid = 'oi'
 
     autolaunch = True if request.form.get('autolaunch') else False
@@ -77,8 +78,9 @@ def tool_return():
             message =  message,
             error_message = error_message)
 
-@app.route('/grade_passback', method = ['POST'])
+@app.route('/grade_passback', methods = ['POST'])
 def grade_passback():
+    import ipdb; ipdb.set_trace()
     outcome_request = OutcomeRequest.from_post_request(request)
     sourcedid = outcome_request.lis_result_sourcedid
     consumer = ToolConsumer('test', 'secret')
@@ -111,8 +113,8 @@ def grade_passback():
 
 def throw_oauth_error():
     resp = make_response('Not authorized', 401)
-    resp.headers['WWW-Authenticate'] = 'OAuth realm="http://%s"' %(request.host_with_port)
+    resp.headers['WWW-Authenticate'] = 'OAuth realm="%s"' %(request.host)
     return resp
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port = 5001)
