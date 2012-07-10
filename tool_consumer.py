@@ -80,7 +80,6 @@ def tool_return():
 
 @app.route('/grade_passback', methods = ['POST'])
 def grade_passback():
-    import ipdb; ipdb.set_trace()
     outcome_request = OutcomeRequest.from_post_request(request)
     sourcedid = outcome_request.lis_result_sourcedid
     consumer = ToolConsumer('test', 'secret')
@@ -96,7 +95,7 @@ def grade_passback():
 
         if outcome_request.is_replace_request():
             response.description = 'Your old score of 0 has been replaced with %s' %(outcome_request.score)
-        elif outcome_request.is_delete_request():
+        elif outcome_request.is_read_request():
             response.description = 'Your score is 50'
             response.score = 50
         elif outcome_request.is_delete_request():
