@@ -61,7 +61,7 @@ def tool_launch():
     if request.form.get('assignment'):
         consumer.lis_outcome_service_url = request.scheme + '://' +\
                 request.host + '/grade_passback'
-        consumer.list_result_sourcedid = 'oi'
+        consumer.lis_result_sourcedid = 'oi'
 
     autolaunch = True if request.form.get('autolaunch') else False
 
